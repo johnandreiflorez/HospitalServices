@@ -1,0 +1,652 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="HospitalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Atencion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_Medico" Type="int" />
+          <Property Name="ID_Enfermera" Type="int" />
+          <Property Name="ID_Paciente" Type="int" />
+          <Property Name="ID_Ingreso" Type="int" />
+          <Property Name="Fecha" Type="date" />
+          <Property Name="Notas" Type="varchar" MaxLength="1000" />
+        </EntityType>
+        <EntityType Name="Enfermera">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="150" />
+          <Property Name="Apellido" Type="varchar" MaxLength="150" />
+          <Property Name="Dirección" Type="varchar" MaxLength="200" />
+          <Property Name="Teléfono" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Facturacion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_Ingreso" Type="int" />
+          <Property Name="Valor" Type="decimal" Precision="38" Scale="2" />
+          <Property Name="FechaFacturacion" Type="date" />
+          <Property Name="FechaPago" Type="date" />
+        </EntityType>
+        <EntityType Name="Habitacion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Tipo" Type="varchar" MaxLength="100" />
+          <Property Name="Precio" Type="decimal" Precision="38" Scale="2" />
+        </EntityType>
+        <EntityType Name="Ingreso">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_Paciente" Type="int" />
+          <Property Name="ID_Habitacion" Type="int" />
+          <Property Name="Fecha_ingreso" Type="date" />
+          <Property Name="Fecha_salida" Type="date" />
+        </EntityType>
+        <EntityType Name="Medico">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="150" />
+          <Property Name="Apellido" Type="varchar" MaxLength="150" />
+          <Property Name="Especialidad" Type="varchar" MaxLength="200" />
+          <Property Name="Dirección" Type="varchar" MaxLength="200" />
+          <Property Name="Teléfono" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Paciente">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="150" />
+          <Property Name="Apellido" Type="varchar" MaxLength="150" />
+          <Property Name="Fecha_nacimiento" Type="date" />
+          <Property Name="Dirección" Type="varchar" MaxLength="200" />
+          <Property Name="Teléfono" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Tratamiento">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="150" />
+          <Property Name="Descripción" Type="varchar" MaxLength="1000" />
+          <Property Name="Costo" Type="decimal" Precision="38" Scale="2" />
+        </EntityType>
+        <EntityType Name="Tratamiento_asignado">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_Tratamiento" Type="int" />
+          <Property Name="ID_Ingreso" Type="int" />
+          <Property Name="Fecha_inicio" Type="date" />
+          <Property Name="Fecha_fin" Type="date" />
+        </EntityType>
+        <Association Name="PK_Enfermera_Atencion">
+          <End Role="Enfermera" Type="Self.Enfermera" Multiplicity="0..1" />
+          <End Role="Atencion" Type="Self.Atencion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Enfermera">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Atencion">
+              <PropertyRef Name="ID_Enfermera" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_Habitacion_Ingreso">
+          <End Role="Habitacion" Type="Self.Habitacion" Multiplicity="0..1" />
+          <End Role="Ingreso" Type="Self.Ingreso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Habitacion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Ingreso">
+              <PropertyRef Name="ID_Habitacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_Ingreso_Atencion">
+          <End Role="Ingreso" Type="Self.Ingreso" Multiplicity="0..1" />
+          <End Role="Atencion" Type="Self.Atencion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingreso">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Atencion">
+              <PropertyRef Name="ID_Ingreso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_Ingreso_Facturacion">
+          <End Role="Ingreso" Type="Self.Ingreso" Multiplicity="0..1" />
+          <End Role="Facturacion" Type="Self.Facturacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingreso">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Facturacion">
+              <PropertyRef Name="ID_Ingreso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_Ingreso_TAsignado">
+          <End Role="Ingreso" Type="Self.Ingreso" Multiplicity="0..1" />
+          <End Role="Tratamiento_asignado" Type="Self.Tratamiento_asignado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingreso">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Tratamiento_asignado">
+              <PropertyRef Name="ID_Ingreso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_Medico_Atencion">
+          <End Role="Medico" Type="Self.Medico" Multiplicity="0..1" />
+          <End Role="Atencion" Type="Self.Atencion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medico">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Atencion">
+              <PropertyRef Name="ID_Medico" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_Paciente_Atencion">
+          <End Role="Paciente" Type="Self.Paciente" Multiplicity="0..1" />
+          <End Role="Atencion" Type="Self.Atencion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Paciente">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Atencion">
+              <PropertyRef Name="ID_Paciente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_Paciente_Ingreso">
+          <End Role="Paciente" Type="Self.Paciente" Multiplicity="0..1" />
+          <End Role="Ingreso" Type="Self.Ingreso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Paciente">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Ingreso">
+              <PropertyRef Name="ID_Paciente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_Tratamiento_TAsignado">
+          <End Role="Tratamiento" Type="Self.Tratamiento" Multiplicity="0..1" />
+          <End Role="Tratamiento_asignado" Type="Self.Tratamiento_asignado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tratamiento">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Tratamiento_asignado">
+              <PropertyRef Name="ID_Tratamiento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HospitalModelStoreContainer">
+          <EntitySet Name="Atencion" EntityType="Self.Atencion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Enfermera" EntityType="Self.Enfermera" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Facturacion" EntityType="Self.Facturacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Habitacion" EntityType="Self.Habitacion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ingreso" EntityType="Self.Ingreso" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Medico" EntityType="Self.Medico" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Paciente" EntityType="Self.Paciente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tratamiento" EntityType="Self.Tratamiento" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tratamiento_asignado" EntityType="Self.Tratamiento_asignado" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="PK_Enfermera_Atencion" Association="Self.PK_Enfermera_Atencion">
+            <End Role="Enfermera" EntitySet="Enfermera" />
+            <End Role="Atencion" EntitySet="Atencion" />
+          </AssociationSet>
+          <AssociationSet Name="PK_Habitacion_Ingreso" Association="Self.PK_Habitacion_Ingreso">
+            <End Role="Habitacion" EntitySet="Habitacion" />
+            <End Role="Ingreso" EntitySet="Ingreso" />
+          </AssociationSet>
+          <AssociationSet Name="PK_Ingreso_Atencion" Association="Self.PK_Ingreso_Atencion">
+            <End Role="Ingreso" EntitySet="Ingreso" />
+            <End Role="Atencion" EntitySet="Atencion" />
+          </AssociationSet>
+          <AssociationSet Name="PK_Ingreso_Facturacion" Association="Self.PK_Ingreso_Facturacion">
+            <End Role="Ingreso" EntitySet="Ingreso" />
+            <End Role="Facturacion" EntitySet="Facturacion" />
+          </AssociationSet>
+          <AssociationSet Name="PK_Ingreso_TAsignado" Association="Self.PK_Ingreso_TAsignado">
+            <End Role="Ingreso" EntitySet="Ingreso" />
+            <End Role="Tratamiento_asignado" EntitySet="Tratamiento_asignado" />
+          </AssociationSet>
+          <AssociationSet Name="PK_Medico_Atencion" Association="Self.PK_Medico_Atencion">
+            <End Role="Medico" EntitySet="Medico" />
+            <End Role="Atencion" EntitySet="Atencion" />
+          </AssociationSet>
+          <AssociationSet Name="PK_Paciente_Atencion" Association="Self.PK_Paciente_Atencion">
+            <End Role="Paciente" EntitySet="Paciente" />
+            <End Role="Atencion" EntitySet="Atencion" />
+          </AssociationSet>
+          <AssociationSet Name="PK_Paciente_Ingreso" Association="Self.PK_Paciente_Ingreso">
+            <End Role="Paciente" EntitySet="Paciente" />
+            <End Role="Ingreso" EntitySet="Ingreso" />
+          </AssociationSet>
+          <AssociationSet Name="PK_Tratamiento_TAsignado" Association="Self.PK_Tratamiento_TAsignado">
+            <End Role="Tratamiento" EntitySet="Tratamiento" />
+            <End Role="Tratamiento_asignado" EntitySet="Tratamiento_asignado" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HospitalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Atencion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_Medico" Type="Int32" />
+          <Property Name="ID_Enfermera" Type="Int32" />
+          <Property Name="ID_Paciente" Type="Int32" />
+          <Property Name="ID_Ingreso" Type="Int32" />
+          <Property Name="Fecha" Type="DateTime" Precision="0" />
+          <Property Name="Notas" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Enfermera" Relationship="Self.PK_Enfermera_Atencion" FromRole="Atencion" ToRole="Enfermera" />
+          <NavigationProperty Name="Ingreso" Relationship="Self.PK_Ingreso_Atencion" FromRole="Atencion" ToRole="Ingreso" />
+          <NavigationProperty Name="Medico" Relationship="Self.PK_Medico_Atencion" FromRole="Atencion" ToRole="Medico" />
+          <NavigationProperty Name="Paciente" Relationship="Self.PK_Paciente_Atencion" FromRole="Atencion" ToRole="Paciente" />
+        </EntityType>
+        <EntityType Name="Enfermera">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Apellido" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Dirección" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Teléfono" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Atencions" Relationship="Self.PK_Enfermera_Atencion" FromRole="Enfermera" ToRole="Atencion" />
+        </EntityType>
+        <EntityType Name="Facturacion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_Ingreso" Type="Int32" />
+          <Property Name="Valor" Type="Decimal" Precision="38" Scale="2" />
+          <Property Name="FechaFacturacion" Type="DateTime" Precision="0" />
+          <Property Name="FechaPago" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Ingreso" Relationship="Self.PK_Ingreso_Facturacion" FromRole="Facturacion" ToRole="Ingreso" />
+        </EntityType>
+        <EntityType Name="Habitacion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Tipo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Precio" Type="Decimal" Precision="38" Scale="2" />
+          <NavigationProperty Name="Ingresoes" Relationship="Self.PK_Habitacion_Ingreso" FromRole="Habitacion" ToRole="Ingreso" />
+        </EntityType>
+        <EntityType Name="Ingreso">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_Paciente" Type="Int32" />
+          <Property Name="ID_Habitacion" Type="Int32" />
+          <Property Name="Fecha_ingreso" Type="DateTime" Precision="0" />
+          <Property Name="Fecha_salida" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Atencions" Relationship="Self.PK_Ingreso_Atencion" FromRole="Ingreso" ToRole="Atencion" />
+          <NavigationProperty Name="Facturacions" Relationship="Self.PK_Ingreso_Facturacion" FromRole="Ingreso" ToRole="Facturacion" />
+          <NavigationProperty Name="Habitacion" Relationship="Self.PK_Habitacion_Ingreso" FromRole="Ingreso" ToRole="Habitacion" />
+          <NavigationProperty Name="Tratamiento_asignado" Relationship="Self.PK_Ingreso_TAsignado" FromRole="Ingreso" ToRole="Tratamiento_asignado" />
+          <NavigationProperty Name="Paciente" Relationship="Self.PK_Paciente_Ingreso" FromRole="Ingreso" ToRole="Paciente" />
+        </EntityType>
+        <EntityType Name="Medico">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Apellido" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Especialidad" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Dirección" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Teléfono" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Atencions" Relationship="Self.PK_Medico_Atencion" FromRole="Medico" ToRole="Atencion" />
+        </EntityType>
+        <EntityType Name="Paciente">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Apellido" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Fecha_nacimiento" Type="DateTime" Precision="0" />
+          <Property Name="Dirección" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Teléfono" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Atencions" Relationship="Self.PK_Paciente_Atencion" FromRole="Paciente" ToRole="Atencion" />
+          <NavigationProperty Name="Ingresoes" Relationship="Self.PK_Paciente_Ingreso" FromRole="Paciente" ToRole="Ingreso" />
+        </EntityType>
+        <EntityType Name="Tratamiento">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Descripción" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="Costo" Type="Decimal" Precision="38" Scale="2" />
+          <NavigationProperty Name="Tratamiento_asignado" Relationship="Self.PK_Tratamiento_TAsignado" FromRole="Tratamiento" ToRole="Tratamiento_asignado" />
+        </EntityType>
+        <EntityType Name="Tratamiento_asignado">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_Tratamiento" Type="Int32" />
+          <Property Name="ID_Ingreso" Type="Int32" />
+          <Property Name="Fecha_inicio" Type="DateTime" Precision="0" />
+          <Property Name="Fecha_fin" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Ingreso" Relationship="Self.PK_Ingreso_TAsignado" FromRole="Tratamiento_asignado" ToRole="Ingreso" />
+          <NavigationProperty Name="Tratamiento" Relationship="Self.PK_Tratamiento_TAsignado" FromRole="Tratamiento_asignado" ToRole="Tratamiento" />
+        </EntityType>
+        <Association Name="PK_Enfermera_Atencion">
+          <End Role="Enfermera" Type="Self.Enfermera" Multiplicity="0..1" />
+          <End Role="Atencion" Type="Self.Atencion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Enfermera">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Atencion">
+              <PropertyRef Name="ID_Enfermera" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_Ingreso_Atencion">
+          <End Role="Ingreso" Type="Self.Ingreso" Multiplicity="0..1" />
+          <End Role="Atencion" Type="Self.Atencion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingreso">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Atencion">
+              <PropertyRef Name="ID_Ingreso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_Medico_Atencion">
+          <End Role="Medico" Type="Self.Medico" Multiplicity="0..1" />
+          <End Role="Atencion" Type="Self.Atencion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medico">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Atencion">
+              <PropertyRef Name="ID_Medico" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_Paciente_Atencion">
+          <End Role="Paciente" Type="Self.Paciente" Multiplicity="0..1" />
+          <End Role="Atencion" Type="Self.Atencion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Paciente">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Atencion">
+              <PropertyRef Name="ID_Paciente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_Ingreso_Facturacion">
+          <End Role="Ingreso" Type="Self.Ingreso" Multiplicity="0..1" />
+          <End Role="Facturacion" Type="Self.Facturacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingreso">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Facturacion">
+              <PropertyRef Name="ID_Ingreso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_Habitacion_Ingreso">
+          <End Role="Habitacion" Type="Self.Habitacion" Multiplicity="0..1" />
+          <End Role="Ingreso" Type="Self.Ingreso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Habitacion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Ingreso">
+              <PropertyRef Name="ID_Habitacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_Ingreso_TAsignado">
+          <End Role="Ingreso" Type="Self.Ingreso" Multiplicity="0..1" />
+          <End Role="Tratamiento_asignado" Type="Self.Tratamiento_asignado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingreso">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Tratamiento_asignado">
+              <PropertyRef Name="ID_Ingreso" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_Paciente_Ingreso">
+          <End Role="Paciente" Type="Self.Paciente" Multiplicity="0..1" />
+          <End Role="Ingreso" Type="Self.Ingreso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Paciente">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Ingreso">
+              <PropertyRef Name="ID_Paciente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_Tratamiento_TAsignado">
+          <End Role="Tratamiento" Type="Self.Tratamiento" Multiplicity="0..1" />
+          <End Role="Tratamiento_asignado" Type="Self.Tratamiento_asignado" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tratamiento">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Tratamiento_asignado">
+              <PropertyRef Name="ID_Tratamiento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBHospital" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Atencions" EntityType="Self.Atencion" />
+          <EntitySet Name="Enfermeras" EntityType="Self.Enfermera" />
+          <EntitySet Name="Facturacions" EntityType="Self.Facturacion" />
+          <EntitySet Name="Habitacions" EntityType="Self.Habitacion" />
+          <EntitySet Name="Ingresoes" EntityType="Self.Ingreso" />
+          <EntitySet Name="Medicos" EntityType="Self.Medico" />
+          <EntitySet Name="Pacientes" EntityType="Self.Paciente" />
+          <EntitySet Name="Tratamientoes" EntityType="Self.Tratamiento" />
+          <EntitySet Name="Tratamiento_asignado" EntityType="Self.Tratamiento_asignado" />
+          <AssociationSet Name="PK_Enfermera_Atencion" Association="Self.PK_Enfermera_Atencion">
+            <End Role="Enfermera" EntitySet="Enfermeras" />
+            <End Role="Atencion" EntitySet="Atencions" />
+          </AssociationSet>
+          <AssociationSet Name="PK_Ingreso_Atencion" Association="Self.PK_Ingreso_Atencion">
+            <End Role="Ingreso" EntitySet="Ingresoes" />
+            <End Role="Atencion" EntitySet="Atencions" />
+          </AssociationSet>
+          <AssociationSet Name="PK_Medico_Atencion" Association="Self.PK_Medico_Atencion">
+            <End Role="Medico" EntitySet="Medicos" />
+            <End Role="Atencion" EntitySet="Atencions" />
+          </AssociationSet>
+          <AssociationSet Name="PK_Paciente_Atencion" Association="Self.PK_Paciente_Atencion">
+            <End Role="Paciente" EntitySet="Pacientes" />
+            <End Role="Atencion" EntitySet="Atencions" />
+          </AssociationSet>
+          <AssociationSet Name="PK_Ingreso_Facturacion" Association="Self.PK_Ingreso_Facturacion">
+            <End Role="Ingreso" EntitySet="Ingresoes" />
+            <End Role="Facturacion" EntitySet="Facturacions" />
+          </AssociationSet>
+          <AssociationSet Name="PK_Habitacion_Ingreso" Association="Self.PK_Habitacion_Ingreso">
+            <End Role="Habitacion" EntitySet="Habitacions" />
+            <End Role="Ingreso" EntitySet="Ingresoes" />
+          </AssociationSet>
+          <AssociationSet Name="PK_Ingreso_TAsignado" Association="Self.PK_Ingreso_TAsignado">
+            <End Role="Ingreso" EntitySet="Ingresoes" />
+            <End Role="Tratamiento_asignado" EntitySet="Tratamiento_asignado" />
+          </AssociationSet>
+          <AssociationSet Name="PK_Paciente_Ingreso" Association="Self.PK_Paciente_Ingreso">
+            <End Role="Paciente" EntitySet="Pacientes" />
+            <End Role="Ingreso" EntitySet="Ingresoes" />
+          </AssociationSet>
+          <AssociationSet Name="PK_Tratamiento_TAsignado" Association="Self.PK_Tratamiento_TAsignado">
+            <End Role="Tratamiento" EntitySet="Tratamientoes" />
+            <End Role="Tratamiento_asignado" EntitySet="Tratamiento_asignado" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="HospitalModelStoreContainer" CdmEntityContainer="DBHospital">
+          <EntitySetMapping Name="Atencions">
+            <EntityTypeMapping TypeName="HospitalModel.Atencion">
+              <MappingFragment StoreEntitySet="Atencion">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ID_Medico" ColumnName="ID_Medico" />
+                <ScalarProperty Name="ID_Enfermera" ColumnName="ID_Enfermera" />
+                <ScalarProperty Name="ID_Paciente" ColumnName="ID_Paciente" />
+                <ScalarProperty Name="ID_Ingreso" ColumnName="ID_Ingreso" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Notas" ColumnName="Notas" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Enfermeras">
+            <EntityTypeMapping TypeName="HospitalModel.Enfermera">
+              <MappingFragment StoreEntitySet="Enfermera">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="Dirección" ColumnName="Dirección" />
+                <ScalarProperty Name="Teléfono" ColumnName="Teléfono" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Facturacions">
+            <EntityTypeMapping TypeName="HospitalModel.Facturacion">
+              <MappingFragment StoreEntitySet="Facturacion">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ID_Ingreso" ColumnName="ID_Ingreso" />
+                <ScalarProperty Name="Valor" ColumnName="Valor" />
+                <ScalarProperty Name="FechaFacturacion" ColumnName="FechaFacturacion" />
+                <ScalarProperty Name="FechaPago" ColumnName="FechaPago" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Habitacions">
+            <EntityTypeMapping TypeName="HospitalModel.Habitacion">
+              <MappingFragment StoreEntitySet="Habitacion">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ingresoes">
+            <EntityTypeMapping TypeName="HospitalModel.Ingreso">
+              <MappingFragment StoreEntitySet="Ingreso">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ID_Paciente" ColumnName="ID_Paciente" />
+                <ScalarProperty Name="ID_Habitacion" ColumnName="ID_Habitacion" />
+                <ScalarProperty Name="Fecha_ingreso" ColumnName="Fecha_ingreso" />
+                <ScalarProperty Name="Fecha_salida" ColumnName="Fecha_salida" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Medicos">
+            <EntityTypeMapping TypeName="HospitalModel.Medico">
+              <MappingFragment StoreEntitySet="Medico">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="Especialidad" ColumnName="Especialidad" />
+                <ScalarProperty Name="Dirección" ColumnName="Dirección" />
+                <ScalarProperty Name="Teléfono" ColumnName="Teléfono" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pacientes">
+            <EntityTypeMapping TypeName="HospitalModel.Paciente">
+              <MappingFragment StoreEntitySet="Paciente">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="Fecha_nacimiento" ColumnName="Fecha_nacimiento" />
+                <ScalarProperty Name="Dirección" ColumnName="Dirección" />
+                <ScalarProperty Name="Teléfono" ColumnName="Teléfono" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tratamientoes">
+            <EntityTypeMapping TypeName="HospitalModel.Tratamiento">
+              <MappingFragment StoreEntitySet="Tratamiento">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Descripción" ColumnName="Descripción" />
+                <ScalarProperty Name="Costo" ColumnName="Costo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tratamiento_asignado">
+            <EntityTypeMapping TypeName="HospitalModel.Tratamiento_asignado">
+              <MappingFragment StoreEntitySet="Tratamiento_asignado">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ID_Tratamiento" ColumnName="ID_Tratamiento" />
+                <ScalarProperty Name="ID_Ingreso" ColumnName="ID_Ingreso" />
+                <ScalarProperty Name="Fecha_inicio" ColumnName="Fecha_inicio" />
+                <ScalarProperty Name="Fecha_fin" ColumnName="Fecha_fin" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
