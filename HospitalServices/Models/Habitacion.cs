@@ -9,9 +9,9 @@
 
 namespace HospitalServices.Models
 {
-    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
+    using Newtonsoft.Json;
     using System.Runtime.Serialization;
 
     public partial class Habitacion
@@ -25,10 +25,14 @@ namespace HospitalServices.Models
         public int ID { get; set; }
         public string Tipo { get; set; }
         public Nullable<decimal> Precio { get; set; }
+        public Nullable<int> ID_Tipo_Habitacion { get; set; }
+        public Nullable<int> ID_Departamento { get; set; }
 
         [JsonIgnore]
         [IgnoreDataMember]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Ingreso> Ingresoes { get; set; }
+        public virtual Tipo_Habitacion Tipo_Habitacion { get; set; }
+        public virtual Departamento Departamento { get; set; }
     }
 }

@@ -16,11 +16,13 @@ namespace HospitalServices.Controllers
         private DBHospital dbHospital = new DBHospital();
 
         // GET: Paciente
+        [EnableCors(origins: "http://localhost:62289", headers: "*", methods: "*")]
         [HttpGet]
         public List<Paciente> GetAll()
         {
             //return dbHospital.Pacientes.Select(x => new PacienteInfo { Nombre = x.Nombre, Apellido = x.Apellido, Teléfono = x.Teléfono, Dirección = x.Dirección }).ToList();
-            return dbHospital.Pacientes.ToList();
+            var response = dbHospital.Pacientes.ToList();
+            return response;
         }
        
         //public List<Paciente> GETACTIVE()

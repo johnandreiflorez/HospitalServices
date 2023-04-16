@@ -34,5 +34,11 @@ namespace HospitalServices.Models
         public virtual DbSet<Paciente> Pacientes { get; set; }
         public virtual DbSet<Tratamiento> Tratamientoes { get; set; }
         public virtual DbSet<Tratamiento_asignado> Tratamiento_asignado { get; set; }
+        public virtual DbSet<Especializacion> Especializacions { get; set; }
+        public virtual DbSet<Medicamento> Medicamentoes { get; set; }
+        public virtual DbSet<Medicamento_Tratamiento> Medicamento_Tratamiento { get; set; }
+        public virtual DbSet<Tipo_Habitacion> Tipo_Habitacion { get; set; }
+        public virtual DbSet<Departamento> Departamentoes { get; set; }
+        public virtual DbSet<Tipo_Documento> Tipo_Documento { get; set; }
     }
 }

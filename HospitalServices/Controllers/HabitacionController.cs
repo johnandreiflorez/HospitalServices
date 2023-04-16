@@ -18,7 +18,8 @@ namespace HospitalServices.Controllers
         [HttpGet]
         public List<Habitacion> GetAll()
         {
-            return dbHospital.Habitacions.ToList();
+            var response = dbHospital.Habitacions.ToList();
+            return response;
         }
 
         // POST: Habitacion/Create

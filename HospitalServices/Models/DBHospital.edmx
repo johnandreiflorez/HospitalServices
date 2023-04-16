@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="HospitalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="HospitalModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Atencion">
           <Key>
             <PropertyRef Name="ID" />
@@ -17,6 +17,14 @@
           <Property Name="Fecha" Type="date" />
           <Property Name="Notas" Type="varchar" MaxLength="1000" />
         </EntityType>
+        <EntityType Name="Departamento">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="100" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="250" />
+        </EntityType>
         <EntityType Name="Enfermera">
           <Key>
             <PropertyRef Name="ID" />
@@ -26,6 +34,14 @@
           <Property Name="Apellido" Type="varchar" MaxLength="150" />
           <Property Name="Dirección" Type="varchar" MaxLength="200" />
           <Property Name="Teléfono" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Especializacion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="100" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="250" />
         </EntityType>
         <EntityType Name="Facturacion">
           <Key>
@@ -44,6 +60,8 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Tipo" Type="varchar" MaxLength="100" />
           <Property Name="Precio" Type="decimal" Precision="38" Scale="2" />
+          <Property Name="ID_Tipo_Habitacion" Type="int" />
+          <Property Name="ID_Departamento" Type="int" />
         </EntityType>
         <EntityType Name="Ingreso">
           <Key>
@@ -55,6 +73,22 @@
           <Property Name="Fecha_ingreso" Type="date" />
           <Property Name="Fecha_salida" Type="date" />
         </EntityType>
+        <EntityType Name="Medicamento">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="100" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="Medicamento_Tratamiento">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_Medicamento" Type="int" />
+          <Property Name="ID_Tratamiento" Type="int" />
+        </EntityType>
         <EntityType Name="Medico">
           <Key>
             <PropertyRef Name="ID" />
@@ -65,6 +99,7 @@
           <Property Name="Especialidad" Type="varchar" MaxLength="200" />
           <Property Name="Dirección" Type="varchar" MaxLength="200" />
           <Property Name="Teléfono" Type="varchar" MaxLength="10" />
+          <Property Name="ID_Especializacion" Type="int" />
         </EntityType>
         <EntityType Name="Paciente">
           <Key>
@@ -76,6 +111,22 @@
           <Property Name="Fecha_nacimiento" Type="date" />
           <Property Name="Dirección" Type="varchar" MaxLength="200" />
           <Property Name="Teléfono" Type="varchar" MaxLength="10" />
+          <Property Name="ID_Tipo_Documento" Type="int" />
+        </EntityType>
+        <EntityType Name="Tipo_Documento">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Tipo_Habitacion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="100" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="250" />
         </EntityType>
         <EntityType Name="Tratamiento">
           <Key>
@@ -96,6 +147,18 @@
           <Property Name="Fecha_inicio" Type="date" />
           <Property Name="Fecha_fin" Type="date" />
         </EntityType>
+        <Association Name="PK_Departamento_Habitacion">
+          <End Role="Departamento" Type="Self.Departamento" Multiplicity="0..1" />
+          <End Role="Habitacion" Type="Self.Habitacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departamento">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Habitacion">
+              <PropertyRef Name="ID_Departamento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="PK_Enfermera_Atencion">
           <End Role="Enfermera" Type="Self.Enfermera" Multiplicity="0..1" />
           <End Role="Atencion" Type="Self.Atencion" Multiplicity="*" />
@@ -105,6 +168,18 @@
             </Principal>
             <Dependent Role="Atencion">
               <PropertyRef Name="ID_Enfermera" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_Especializacion_Medico">
+          <End Role="Especializacion" Type="Self.Especializacion" Multiplicity="0..1" />
+          <End Role="Medico" Type="Self.Medico" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Especializacion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Medico">
+              <PropertyRef Name="ID_Especializacion" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -156,6 +231,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="PK_Medicamento_MTratamiento">
+          <End Role="Medicamento" Type="Self.Medicamento" Multiplicity="0..1" />
+          <End Role="Medicamento_Tratamiento" Type="Self.Medicamento_Tratamiento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medicamento">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Medicamento_Tratamiento">
+              <PropertyRef Name="ID_Medicamento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="PK_Medico_Atencion">
           <End Role="Medico" Type="Self.Medico" Multiplicity="0..1" />
           <End Role="Atencion" Type="Self.Atencion" Multiplicity="*" />
@@ -192,6 +279,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="PK_TDocumento_Paciente">
+          <End Role="Tipo_Documento" Type="Self.Tipo_Documento" Multiplicity="0..1" />
+          <End Role="Paciente" Type="Self.Paciente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tipo_Documento">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Paciente">
+              <PropertyRef Name="ID_Tipo_Documento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_THabitacion_Habitacion">
+          <End Role="Tipo_Habitacion" Type="Self.Tipo_Habitacion" Multiplicity="0..1" />
+          <End Role="Habitacion" Type="Self.Habitacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tipo_Habitacion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Habitacion">
+              <PropertyRef Name="ID_Tipo_Habitacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_Tratamiento_MTratamiento">
+          <End Role="Tratamiento" Type="Self.Tratamiento" Multiplicity="0..1" />
+          <End Role="Medicamento_Tratamiento" Type="Self.Medicamento_Tratamiento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tratamiento">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Medicamento_Tratamiento">
+              <PropertyRef Name="ID_Tratamiento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="PK_Tratamiento_TAsignado">
           <End Role="Tratamiento" Type="Self.Tratamiento" Multiplicity="0..1" />
           <End Role="Tratamiento_asignado" Type="Self.Tratamiento_asignado" Multiplicity="*" />
@@ -206,17 +329,31 @@
         </Association>
         <EntityContainer Name="HospitalModelStoreContainer">
           <EntitySet Name="Atencion" EntityType="Self.Atencion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Departamento" EntityType="Self.Departamento" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Enfermera" EntityType="Self.Enfermera" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Especializacion" EntityType="Self.Especializacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Facturacion" EntityType="Self.Facturacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Habitacion" EntityType="Self.Habitacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ingreso" EntityType="Self.Ingreso" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Medicamento" EntityType="Self.Medicamento" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Medicamento_Tratamiento" EntityType="Self.Medicamento_Tratamiento" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Medico" EntityType="Self.Medico" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Paciente" EntityType="Self.Paciente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tipo_Documento" EntityType="Self.Tipo_Documento" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tipo_Habitacion" EntityType="Self.Tipo_Habitacion" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tratamiento" EntityType="Self.Tratamiento" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tratamiento_asignado" EntityType="Self.Tratamiento_asignado" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="PK_Departamento_Habitacion" Association="Self.PK_Departamento_Habitacion">
+            <End Role="Departamento" EntitySet="Departamento" />
+            <End Role="Habitacion" EntitySet="Habitacion" />
+          </AssociationSet>
           <AssociationSet Name="PK_Enfermera_Atencion" Association="Self.PK_Enfermera_Atencion">
             <End Role="Enfermera" EntitySet="Enfermera" />
             <End Role="Atencion" EntitySet="Atencion" />
+          </AssociationSet>
+          <AssociationSet Name="PK_Especializacion_Medico" Association="Self.PK_Especializacion_Medico">
+            <End Role="Especializacion" EntitySet="Especializacion" />
+            <End Role="Medico" EntitySet="Medico" />
           </AssociationSet>
           <AssociationSet Name="PK_Habitacion_Ingreso" Association="Self.PK_Habitacion_Ingreso">
             <End Role="Habitacion" EntitySet="Habitacion" />
@@ -234,6 +371,10 @@
             <End Role="Ingreso" EntitySet="Ingreso" />
             <End Role="Tratamiento_asignado" EntitySet="Tratamiento_asignado" />
           </AssociationSet>
+          <AssociationSet Name="PK_Medicamento_MTratamiento" Association="Self.PK_Medicamento_MTratamiento">
+            <End Role="Medicamento" EntitySet="Medicamento" />
+            <End Role="Medicamento_Tratamiento" EntitySet="Medicamento_Tratamiento" />
+          </AssociationSet>
           <AssociationSet Name="PK_Medico_Atencion" Association="Self.PK_Medico_Atencion">
             <End Role="Medico" EntitySet="Medico" />
             <End Role="Atencion" EntitySet="Atencion" />
@@ -246,13 +387,24 @@
             <End Role="Paciente" EntitySet="Paciente" />
             <End Role="Ingreso" EntitySet="Ingreso" />
           </AssociationSet>
+          <AssociationSet Name="PK_TDocumento_Paciente" Association="Self.PK_TDocumento_Paciente">
+            <End Role="Tipo_Documento" EntitySet="Tipo_Documento" />
+            <End Role="Paciente" EntitySet="Paciente" />
+          </AssociationSet>
+          <AssociationSet Name="PK_THabitacion_Habitacion" Association="Self.PK_THabitacion_Habitacion">
+            <End Role="Tipo_Habitacion" EntitySet="Tipo_Habitacion" />
+            <End Role="Habitacion" EntitySet="Habitacion" />
+          </AssociationSet>
+          <AssociationSet Name="PK_Tratamiento_MTratamiento" Association="Self.PK_Tratamiento_MTratamiento">
+            <End Role="Tratamiento" EntitySet="Tratamiento" />
+            <End Role="Medicamento_Tratamiento" EntitySet="Medicamento_Tratamiento" />
+          </AssociationSet>
           <AssociationSet Name="PK_Tratamiento_TAsignado" Association="Self.PK_Tratamiento_TAsignado">
             <End Role="Tratamiento" EntitySet="Tratamiento" />
             <End Role="Tratamiento_asignado" EntitySet="Tratamiento_asignado" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="HospitalModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -302,6 +454,10 @@
           <Property Name="Tipo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Precio" Type="Decimal" Precision="38" Scale="2" />
           <NavigationProperty Name="Ingresoes" Relationship="Self.PK_Habitacion_Ingreso" FromRole="Habitacion" ToRole="Ingreso" />
+          <Property Name="ID_Tipo_Habitacion" Type="Int32" />
+          <NavigationProperty Name="Tipo_Habitacion" Relationship="HospitalModel.PK_THabitacion_Habitacion" FromRole="Habitacion" ToRole="Tipo_Habitacion" />
+          <Property Name="ID_Departamento" Type="Int32" />
+          <NavigationProperty Name="Departamento" Relationship="HospitalModel.PK_Departamento_Habitacion" FromRole="Habitacion" ToRole="Departamento" />
         </EntityType>
         <EntityType Name="Ingreso">
           <Key>
@@ -329,6 +485,8 @@
           <Property Name="Dirección" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="Teléfono" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Atencions" Relationship="Self.PK_Medico_Atencion" FromRole="Medico" ToRole="Atencion" />
+          <Property Name="ID_Especializacion" Type="Int32" />
+          <NavigationProperty Name="Especializacion" Relationship="HospitalModel.PK_Especializacion_Medico" FromRole="Medico" ToRole="Especializacion" />
         </EntityType>
         <EntityType Name="Paciente">
           <Key>
@@ -342,6 +500,8 @@
           <Property Name="Teléfono" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Atencions" Relationship="Self.PK_Paciente_Atencion" FromRole="Paciente" ToRole="Atencion" />
           <NavigationProperty Name="Ingresoes" Relationship="Self.PK_Paciente_Ingreso" FromRole="Paciente" ToRole="Ingreso" />
+          <Property Name="ID_Tipo_Documento" Type="Int32" />
+          <NavigationProperty Name="Tipo_Documento" Relationship="HospitalModel.PK_TDocumento_Paciente" FromRole="Paciente" ToRole="Tipo_Documento" />
         </EntityType>
         <EntityType Name="Tratamiento">
           <Key>
@@ -352,6 +512,7 @@
           <Property Name="Descripción" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
           <Property Name="Costo" Type="Decimal" Precision="38" Scale="2" />
           <NavigationProperty Name="Tratamiento_asignado" Relationship="Self.PK_Tratamiento_TAsignado" FromRole="Tratamiento" ToRole="Tratamiento_asignado" />
+          <NavigationProperty Name="Medicamento_Tratamiento" Relationship="HospitalModel.PK_Tratamiento_MTratamiento" FromRole="Tratamiento" ToRole="Medicamento_Tratamiento" />
         </EntityType>
         <EntityType Name="Tratamiento_asignado">
           <Key>
@@ -519,7 +680,163 @@
             <End Role="Tratamiento" EntitySet="Tratamientoes" />
             <End Role="Tratamiento_asignado" EntitySet="Tratamiento_asignado" />
           </AssociationSet>
+          <EntitySet Name="Especializacions" EntityType="HospitalModel.Especializacion" />
+          <EntitySet Name="Medicamentoes" EntityType="HospitalModel.Medicamento" />
+          <EntitySet Name="Medicamento_Tratamiento" EntityType="HospitalModel.Medicamento_Tratamiento" />
+          <EntitySet Name="Tipo_Habitacion" EntityType="HospitalModel.Tipo_Habitacion" />
+          <AssociationSet Name="PK_THabitacion_Habitacion" Association="HospitalModel.PK_THabitacion_Habitacion">
+            <End Role="Tipo_Habitacion" EntitySet="Tipo_Habitacion" />
+            <End Role="Habitacion" EntitySet="Habitacions" />
+          </AssociationSet>
+          <AssociationSet Name="PK_Medicamento_MTratamiento" Association="HospitalModel.PK_Medicamento_MTratamiento">
+            <End Role="Medicamento" EntitySet="Medicamentoes" />
+            <End Role="Medicamento_Tratamiento" EntitySet="Medicamento_Tratamiento" />
+          </AssociationSet>
+          <AssociationSet Name="PK_Tratamiento_MTratamiento" Association="HospitalModel.PK_Tratamiento_MTratamiento">
+            <End Role="Tratamiento" EntitySet="Tratamientoes" />
+            <End Role="Medicamento_Tratamiento" EntitySet="Medicamento_Tratamiento" />
+          </AssociationSet>
+          <EntitySet Name="Departamentoes" EntityType="HospitalModel.Departamento" />
+          <EntitySet Name="Tipo_Documento" EntityType="HospitalModel.Tipo_Documento" />
+          <AssociationSet Name="PK_Departamento_Habitacion" Association="HospitalModel.PK_Departamento_Habitacion">
+            <End Role="Departamento" EntitySet="Departamentoes" />
+            <End Role="Habitacion" EntitySet="Habitacions" />
+          </AssociationSet>
+          <AssociationSet Name="PK_Especializacion_Medico" Association="HospitalModel.PK_Especializacion_Medico">
+            <End Role="Especializacion" EntitySet="Especializacions" />
+            <End Role="Medico" EntitySet="Medicos" />
+          </AssociationSet>
+          <AssociationSet Name="PK_TDocumento_Paciente" Association="HospitalModel.PK_TDocumento_Paciente">
+            <End Role="Tipo_Documento" EntitySet="Tipo_Documento" />
+            <End Role="Paciente" EntitySet="Pacientes" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Especializacion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Medicos" Relationship="HospitalModel.PK_Especializacion_Medico" FromRole="Especializacion" ToRole="Medico" />
+        </EntityType>
+        <EntityType Name="Medicamento">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Medicamento_Tratamiento" Relationship="HospitalModel.PK_Medicamento_MTratamiento" FromRole="Medicamento" ToRole="Medicamento_Tratamiento" />
+        </EntityType>
+        <EntityType Name="Medicamento_Tratamiento">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_Medicamento" Type="Int32" />
+          <Property Name="ID_Tratamiento" Type="Int32" />
+          <NavigationProperty Name="Medicamento" Relationship="HospitalModel.PK_Medicamento_MTratamiento" FromRole="Medicamento_Tratamiento" ToRole="Medicamento" />
+          <NavigationProperty Name="Tratamiento" Relationship="HospitalModel.PK_Tratamiento_MTratamiento" FromRole="Medicamento_Tratamiento" ToRole="Tratamiento" />
+        </EntityType>
+        <EntityType Name="Tipo_Habitacion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Habitacions" Relationship="HospitalModel.PK_THabitacion_Habitacion" FromRole="Tipo_Habitacion" ToRole="Habitacion" />
+        </EntityType>
+        <Association Name="PK_THabitacion_Habitacion">
+          <End Type="HospitalModel.Tipo_Habitacion" Role="Tipo_Habitacion" Multiplicity="0..1" />
+          <End Type="HospitalModel.Habitacion" Role="Habitacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tipo_Habitacion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Habitacion">
+              <PropertyRef Name="ID_Tipo_Habitacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_Medicamento_MTratamiento">
+          <End Type="HospitalModel.Medicamento" Role="Medicamento" Multiplicity="0..1" />
+          <End Type="HospitalModel.Medicamento_Tratamiento" Role="Medicamento_Tratamiento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Medicamento">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Medicamento_Tratamiento">
+              <PropertyRef Name="ID_Medicamento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_Tratamiento_MTratamiento">
+          <End Type="HospitalModel.Tratamiento" Role="Tratamiento" Multiplicity="0..1" />
+          <End Type="HospitalModel.Medicamento_Tratamiento" Role="Medicamento_Tratamiento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tratamiento">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Medicamento_Tratamiento">
+              <PropertyRef Name="ID_Tratamiento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Departamento">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Habitacions" Relationship="HospitalModel.PK_Departamento_Habitacion" FromRole="Departamento" ToRole="Habitacion" />
+        </EntityType>
+        <EntityType Name="Tipo_Documento">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Pacientes" Relationship="HospitalModel.PK_TDocumento_Paciente" FromRole="Tipo_Documento" ToRole="Paciente" />
+        </EntityType>
+        <Association Name="PK_Departamento_Habitacion">
+          <End Type="HospitalModel.Departamento" Role="Departamento" Multiplicity="0..1" />
+          <End Type="HospitalModel.Habitacion" Role="Habitacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departamento">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Habitacion">
+              <PropertyRef Name="ID_Departamento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_Especializacion_Medico">
+          <End Type="HospitalModel.Especializacion" Role="Especializacion" Multiplicity="0..1" />
+          <End Type="HospitalModel.Medico" Role="Medico" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Especializacion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Medico">
+              <PropertyRef Name="ID_Especializacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PK_TDocumento_Paciente">
+          <End Type="HospitalModel.Tipo_Documento" Role="Tipo_Documento" Multiplicity="0..1" />
+          <End Type="HospitalModel.Paciente" Role="Paciente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tipo_Documento">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Paciente">
+              <PropertyRef Name="ID_Tipo_Documento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -564,6 +881,8 @@
           <EntitySetMapping Name="Habitacions">
             <EntityTypeMapping TypeName="HospitalModel.Habitacion">
               <MappingFragment StoreEntitySet="Habitacion">
+                <ScalarProperty Name="ID_Departamento" ColumnName="ID_Departamento" />
+                <ScalarProperty Name="ID_Tipo_Habitacion" ColumnName="ID_Tipo_Habitacion" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Tipo" ColumnName="Tipo" />
                 <ScalarProperty Name="Precio" ColumnName="Precio" />
@@ -584,6 +903,7 @@
           <EntitySetMapping Name="Medicos">
             <EntityTypeMapping TypeName="HospitalModel.Medico">
               <MappingFragment StoreEntitySet="Medico">
+                <ScalarProperty Name="ID_Especializacion" ColumnName="ID_Especializacion" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="Apellido" ColumnName="Apellido" />
@@ -596,6 +916,7 @@
           <EntitySetMapping Name="Pacientes">
             <EntityTypeMapping TypeName="HospitalModel.Paciente">
               <MappingFragment StoreEntitySet="Paciente">
+                <ScalarProperty Name="ID_Tipo_Documento" ColumnName="ID_Tipo_Documento" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="Apellido" ColumnName="Apellido" />
@@ -623,6 +944,59 @@
                 <ScalarProperty Name="ID_Ingreso" ColumnName="ID_Ingreso" />
                 <ScalarProperty Name="Fecha_inicio" ColumnName="Fecha_inicio" />
                 <ScalarProperty Name="Fecha_fin" ColumnName="Fecha_fin" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Especializacions">
+            <EntityTypeMapping TypeName="HospitalModel.Especializacion">
+              <MappingFragment StoreEntitySet="Especializacion">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Medicamentoes">
+            <EntityTypeMapping TypeName="HospitalModel.Medicamento">
+              <MappingFragment StoreEntitySet="Medicamento">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Medicamento_Tratamiento">
+            <EntityTypeMapping TypeName="HospitalModel.Medicamento_Tratamiento">
+              <MappingFragment StoreEntitySet="Medicamento_Tratamiento">
+                <ScalarProperty Name="ID_Tratamiento" ColumnName="ID_Tratamiento" />
+                <ScalarProperty Name="ID_Medicamento" ColumnName="ID_Medicamento" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tipo_Habitacion">
+            <EntityTypeMapping TypeName="HospitalModel.Tipo_Habitacion">
+              <MappingFragment StoreEntitySet="Tipo_Habitacion">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Departamentoes">
+            <EntityTypeMapping TypeName="HospitalModel.Departamento">
+              <MappingFragment StoreEntitySet="Departamento">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tipo_Documento">
+            <EntityTypeMapping TypeName="HospitalModel.Tipo_Documento">
+              <MappingFragment StoreEntitySet="Tipo_Documento">
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

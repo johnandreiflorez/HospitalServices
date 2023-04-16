@@ -9,10 +9,10 @@
 
 namespace HospitalServices.Models
 {
-    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
+    using Newtonsoft.Json;
 
     public partial class Paciente
     {
@@ -29,7 +29,7 @@ namespace HospitalServices.Models
         public Nullable<System.DateTime> Fecha_nacimiento { get; set; }
         public string Dirección { get; set; }
         public string Teléfono { get; set; }
-
+        public Nullable<int> ID_Tipo_Documento { get; set; }
         [JsonIgnore]
         [IgnoreDataMember]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -38,5 +38,6 @@ namespace HospitalServices.Models
         [IgnoreDataMember]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Ingreso> Ingresoes { get; set; }
+        public virtual Tipo_Documento Tipo_Documento { get; set; }
     }
 }
