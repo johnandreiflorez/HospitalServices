@@ -167,8 +167,11 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Clases\InfoFacturacion.cs" />
     <Compile Include="Clases\infoIngreso.cs" />
+    <Compile Include="Clases\Medico.cs" />
     <Compile Include="Clases\PacienteInfo.cs" />
+    <Compile Include="Clases\TratamientosFacturar.cs" />
     <Compile Include="Controllers\AsignacionTratamientoController.cs" />
     <Compile Include="Controllers\AtencionController.cs" />
     <Compile Include="Controllers\EnfermeraController.cs" />
@@ -200,7 +203,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DBHospital.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Departamento.cs">
+      <DependentUpon>DBHospital.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Enfermera.cs">
+      <DependentUpon>DBHospital.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Especializacion.cs">
       <DependentUpon>DBHospital.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Facturacion.cs">
@@ -212,10 +221,22 @@
     <Compile Include="Models\Ingreso.cs">
       <DependentUpon>DBHospital.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Medicamento.cs">
+      <DependentUpon>DBHospital.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Medicamento_Tratamiento.cs">
+      <DependentUpon>DBHospital.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Medico.cs">
       <DependentUpon>DBHospital.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Paciente.cs">
+      <DependentUpon>DBHospital.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Tipo_Documento.cs">
+      <DependentUpon>DBHospital.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Tipo_Habitacion.cs">
       <DependentUpon>DBHospital.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Tratamiento.cs">

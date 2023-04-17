@@ -16,12 +16,20 @@ namespace HospitalServices.Controllers
         private DBHospital dbHospital = new DBHospital();
 
         // GET: Paciente
+        [EnableCors(origins: "http://localhost:62289", headers: "*", methods: "*")]
         [HttpGet]
         public List<Paciente> GetAll()
         {
             //return dbHospital.Pacientes.Select(x => new PacienteInfo { Nombre = x.Nombre, Apellido = x.Apellido, Teléfono = x.Teléfono, Dirección = x.Dirección }).ToList();
-            return dbHospital.Pacientes.ToList();
+            var response = dbHospital.Pacientes.ToList();
+            return response;
         }
+       
+        //public List<Paciente> GETACTIVE()
+        //{
+        //     //return dbHospital.Pacientes.Where(x => x.Ingresoes.Where(z => z.Fecha_salida == null).FirstOrDefault().Fecha_salida == null).ToList();
+        //    return (from p in dbHospital.Pacientes join i in dbHospital.Ingresoes on p.ID equals i.ID_Paciente where i.Fecha_salida == null && i.Fecha_ingreso != null select p).ToList();
+        //}
 
         // GET: Paciente/Details/5
         //[HttpGet]

@@ -11,31 +11,20 @@ namespace HospitalServices.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.Runtime.Serialization;
-    using Newtonsoft.Json;
-
-    public partial class Tratamiento
+    
+    public partial class Especializacion
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Tratamiento()
+        public Especializacion()
         {
-            this.Tratamiento_asignado = new HashSet<Tratamiento_asignado>();
-            this.Medicamento_Tratamiento = new HashSet<Medicamento_Tratamiento>();
+            this.Medicos = new HashSet<Medico>();
         }
     
         public int ID { get; set; }
         public string Nombre { get; set; }
-        public string Descripción { get; set; }
-        public Nullable<decimal> Costo { get; set; }
-        
-        [JsonIgnore]
-        [IgnoreDataMember]
+        public string Descripcion { get; set; }
+    
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Tratamiento_asignado> Tratamiento_asignado { get; set; }
-
-        [JsonIgnore]
-        [IgnoreDataMember]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Medicamento_Tratamiento> Medicamento_Tratamiento { get; set; }
+        public virtual ICollection<Medico> Medicos { get; set; }
     }
 }
