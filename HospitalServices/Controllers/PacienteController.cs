@@ -18,10 +18,19 @@ namespace HospitalServices.Controllers
         // GET: Paciente
         [EnableCors(origins: "http://localhost:62289", headers: "*", methods: "*")]
         [HttpGet]
-        public List<Paciente> GetAll()
+        public List<PacienteInfo> GetAll()
         {
-            //return dbHospital.Pacientes.Select(x => new PacienteInfo { Nombre = x.Nombre, Apellido = x.Apellido, Teléfono = x.Teléfono, Dirección = x.Dirección }).ToList();
-            var response = dbHospital.Pacientes.ToList();
+            var response = dbHospital.Pacientes.Select(x => new PacienteInfo {
+                ID = x.ID,
+                Nombre = x.Nombre,
+                Apellido = x.Apellido,
+                Fecha_Nacimiento = x.Fecha_nacimiento.ToString(),
+                Teléfono = x.Teléfono,
+                Dirección = x.Dirección,
+                Tipo_Documento = x.Tipo_Documento.Nombre,
+                Documento = x.Cedula,
+                }).ToList();
+            //var response = dbHospital.Pacientes.ToList();
             return response;
         }
        
@@ -58,6 +67,8 @@ namespace HospitalServices.Controllers
             dbPaciente.Dirección = paciente.Dirección;
             dbPaciente.Teléfono = paciente.Teléfono;
             dbPaciente.Fecha_nacimiento = paciente.Fecha_nacimiento;
+            dbPaciente.ID_Tipo_Documento = paciente.ID_Tipo_Documento;
+            dbPaciente.Cedula = paciente.Cedula;
             dbHospital.SaveChanges();
             return "Se actualizo de manera correcta";
         }

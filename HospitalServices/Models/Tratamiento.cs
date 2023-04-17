@@ -27,12 +27,10 @@ namespace HospitalServices.Models
         public string Nombre { get; set; }
         public string Descripción { get; set; }
         public Nullable<decimal> Costo { get; set; }
-        
         [JsonIgnore]
         [IgnoreDataMember]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Tratamiento_asignado> Tratamiento_asignado { get; set; }
-
         [JsonIgnore]
         [IgnoreDataMember]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

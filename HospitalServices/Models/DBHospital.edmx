@@ -62,6 +62,7 @@
           <Property Name="Precio" Type="decimal" Precision="38" Scale="2" />
           <Property Name="ID_Tipo_Habitacion" Type="int" />
           <Property Name="ID_Departamento" Type="int" />
+          <Property Name="Piso" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="Ingreso">
           <Key>
@@ -112,6 +113,7 @@
           <Property Name="Dirección" Type="varchar" MaxLength="200" />
           <Property Name="Teléfono" Type="varchar" MaxLength="10" />
           <Property Name="ID_Tipo_Documento" Type="int" />
+          <Property Name="Cedula" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="Tipo_Documento">
           <Key>
@@ -458,6 +460,7 @@
           <NavigationProperty Name="Tipo_Habitacion" Relationship="HospitalModel.PK_THabitacion_Habitacion" FromRole="Habitacion" ToRole="Tipo_Habitacion" />
           <Property Name="ID_Departamento" Type="Int32" />
           <NavigationProperty Name="Departamento" Relationship="HospitalModel.PK_Departamento_Habitacion" FromRole="Habitacion" ToRole="Departamento" />
+          <Property Name="Piso" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Ingreso">
           <Key>
@@ -502,6 +505,7 @@
           <NavigationProperty Name="Ingresoes" Relationship="Self.PK_Paciente_Ingreso" FromRole="Paciente" ToRole="Ingreso" />
           <Property Name="ID_Tipo_Documento" Type="Int32" />
           <NavigationProperty Name="Tipo_Documento" Relationship="HospitalModel.PK_TDocumento_Paciente" FromRole="Paciente" ToRole="Tipo_Documento" />
+          <Property Name="Cedula" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Tratamiento">
           <Key>
@@ -881,6 +885,7 @@
           <EntitySetMapping Name="Habitacions">
             <EntityTypeMapping TypeName="HospitalModel.Habitacion">
               <MappingFragment StoreEntitySet="Habitacion">
+                <ScalarProperty Name="Piso" ColumnName="Piso" />
                 <ScalarProperty Name="ID_Departamento" ColumnName="ID_Departamento" />
                 <ScalarProperty Name="ID_Tipo_Habitacion" ColumnName="ID_Tipo_Habitacion" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -916,6 +921,7 @@
           <EntitySetMapping Name="Pacientes">
             <EntityTypeMapping TypeName="HospitalModel.Paciente">
               <MappingFragment StoreEntitySet="Paciente">
+                <ScalarProperty Name="Cedula" ColumnName="Cedula" />
                 <ScalarProperty Name="ID_Tipo_Documento" ColumnName="ID_Tipo_Documento" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using HospitalServices.Models;
+using HospitalServices.Clases;
 
 namespace HospitalServices.Controllers
 {
@@ -16,9 +17,16 @@ namespace HospitalServices.Controllers
 
         // GET: Habitacion
         [HttpGet]
-        public List<Habitacion> GetAll()
+        public List<InfoHabitacion> GetAll()
         {
-            var response = dbHospital.Habitacions.ToList();
+            var response = dbHospital.Habitacions.Select(x => new InfoHabitacion {
+                ID = x.ID,
+                Tipo = x.Tipo_Habitacion.Nombre,
+                Departamento = x.Departamento.Nombre,
+                Piso = x.Piso,
+                Precio = x.Precio.Value,
+                Descripcion = x.Tipo
+            }).ToList();
             return response;
         }
 
@@ -46,6 +54,9 @@ namespace HospitalServices.Controllers
             Habitacion dbHabitacion = dbHospital.Habitacions.Where(x => x.ID == habitacion.ID).FirstOrDefault();
             dbHabitacion.Precio = habitacion.Precio;
             dbHabitacion.Tipo = habitacion.Tipo;
+            dbHabitacion.Piso = habitacion.Piso;
+            dbHabitacion.ID_Tipo_Habitacion = habitacion.ID_Tipo_Habitacion;
+            dbHabitacion.ID_Departamento = habitacion.ID_Departamento;
             
             dbHospital.SaveChanges();
             return "Se actualizo de manera correcta";
