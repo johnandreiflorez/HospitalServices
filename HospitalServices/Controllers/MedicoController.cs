@@ -18,8 +18,20 @@ namespace HospitalServices.Controllers
         [HttpGet]
         public List<Medico> GetAll()
         {
-            return dbHospital.Medicos.ToList();
+            //return dbHospital.Medicos.ToList();
+
+            var result = dbHospital.Medicos.Select(x => new Medico
+            {
+                ID = x.ID,
+                Nombre = x.Nombre,
+                Apellido = x.Apellido,
+                Especialidad = x.Especialidad,
+                Dirección = x.Dirección,
+                Teléfono = x.Teléfono
+            }).ToList();
+            return result;
         }
+    
 
         // POST: Medico/Create
         [HttpPost]
