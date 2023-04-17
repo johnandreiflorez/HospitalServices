@@ -167,9 +167,11 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Clases\InfoFacturacion.cs" />
     <Compile Include="Clases\infoIngreso.cs" />
     <Compile Include="Clases\Medico.cs" />
     <Compile Include="Clases\PacienteInfo.cs" />
+    <Compile Include="Clases\TratamientosFacturar.cs" />
     <Compile Include="Controllers\AsignacionTratamientoController.cs" />
     <Compile Include="Controllers\AtencionController.cs" />
     <Compile Include="Controllers\EnfermeraController.cs" />
