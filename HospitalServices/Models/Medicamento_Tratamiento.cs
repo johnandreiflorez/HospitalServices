@@ -11,14 +11,20 @@ namespace HospitalServices.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Runtime.Serialization;
+    using Newtonsoft.Json;
+
     public partial class Medicamento_Tratamiento
     {
         public int ID { get; set; }
         public Nullable<int> ID_Medicamento { get; set; }
         public Nullable<int> ID_Tratamiento { get; set; }
-    
+
+        [JsonIgnore]
+        [IgnoreDataMember]
         public virtual Medicamento Medicamento { get; set; }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public virtual Tratamiento Tratamiento { get; set; }
     }
 }

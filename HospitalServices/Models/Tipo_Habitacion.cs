@@ -11,7 +11,9 @@ namespace HospitalServices.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Runtime.Serialization;
+    using Newtonsoft.Json;
+
     public partial class Tipo_Habitacion
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -23,7 +25,9 @@ namespace HospitalServices.Models
         public int ID { get; set; }
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
-    
+
+        [JsonIgnore]
+        [IgnoreDataMember]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Habitacion> Habitacions { get; set; }
     }

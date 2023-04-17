@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using HospitalServices.Models;
+using HospitalServices.Clases;
 
 namespace HospitalServices.Controllers
 {
@@ -16,9 +17,38 @@ namespace HospitalServices.Controllers
 
         // GET: Facturacion
         [HttpGet]
-        public List<Facturacion> GetAll()
+        public List<InfoFacturacion> GetAll()
         {
-            return dbHospital.Facturacions.ToList();
+            var response = (from i in dbHospital.Ingresoes
+                            join p in dbHospital.Pacientes on i.ID_Paciente equals p.ID
+                            join h in dbHospital.Habitacions on i.ID_Habitacion equals h.ID
+                            join th in dbHospital.Tipo_Habitacion on h.ID_Tipo_Habitacion equals th.ID
+                            join d in dbHospital.Departamentoes on h.ID_Departamento equals d.ID
+                            where i.Fecha_salida == null
+                            select new InfoFacturacion
+                            {
+                                Cedula = p.Nombre,
+                                Paciente = p.Nombre,
+                                Habitacion = th.Nombre + ": " + th.Descripcion + ", ubicada en el departamento: " + d.Nombre + ", piso: " + h.Tipo,
+                                FechaIngreso = i.Fecha_ingreso.ToString(),
+                                PrecioHabitacion = h.Precio.Value,
+                                IDIngreso = i.ID
+                            }).ToList();
+            return response;
+        }
+
+        [HttpPatch]
+        public List<TratamientosFacturar> getTratamientos(int ID)
+        {
+            var response = (from ta in dbHospital.Tratamiento_asignado join t in dbHospital.Tratamientoes on ta.ID_Tratamiento equals t.ID where ta.ID_Ingreso == ID 
+                            select  new TratamientosFacturar{
+                                Medicamento = "Tales",
+                                Tratamiento = t.Nombre +": "+ t.Descripción,
+                                Fecha_Fin = ta.Fecha_fin.ToString(),
+                                Fecha_Inicio = ta.Fecha_inicio.ToString(),
+                                Valor = t.Costo.Value,
+                            }).ToList();
+            return response;
         }
 
         // POST: Facturacion/Create
