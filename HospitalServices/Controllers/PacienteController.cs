@@ -15,8 +15,17 @@ namespace HospitalServices.Controllers
     {
         private DBHospital dbHospital = new DBHospital();
 
+        [HttpPatch]
+        public List<Paciente> GetPacientes()
+        {
+            var response = (from p in dbHospital.Pacientes 
+                            join i in dbHospital.Ingresoes on p.ID equals i.ID_Paciente 
+                            join h in dbHospital.Habitacions on i.ID_Habitacion equals h.ID
+                            where i.Fecha_salida == null select p).ToList();
+            return response;
+        }
+
         // GET: Paciente
-        [EnableCors(origins: "http://localhost:62289", headers: "*", methods: "*")]
         [HttpGet]
         public List<PacienteInfo> GetAll()
         {

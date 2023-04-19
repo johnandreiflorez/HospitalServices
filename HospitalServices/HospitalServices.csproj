@@ -172,6 +172,7 @@
     <Compile Include="Clases\Enfermera.cs" />
     <Compile Include="Clases\infoIngreso.cs" />
     <Compile Include="Clases\infoMedicamento.cs" />
+    <Compile Include="Clases\InfoTratamientoAsignado.cs" />
     <Compile Include="Clases\Medico.cs" />
     <Compile Include="Clases\PacienteInfo.cs" />
     <Compile Include="Clases\TratamientosFacturar.cs" />

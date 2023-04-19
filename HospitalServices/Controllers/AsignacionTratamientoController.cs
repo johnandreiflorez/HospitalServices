@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using HospitalServices.Models;
+using HospitalServices.Clases;
 
 namespace HospitalServices.Controllers
 {
@@ -16,9 +17,19 @@ namespace HospitalServices.Controllers
 
         // GET: Tratamiento_asignado
         [HttpGet]
-        public List<Tratamiento_asignado> GetAll()
+        public List<InfoTratamientoAsignado> GetAll()
         {
-            return dbHospital.Tratamiento_asignado.ToList();
+            var result = (from ta in dbHospital.Tratamiento_asignado
+                          join i in dbHospital.Ingresoes on ta.ID_Ingreso equals i.ID
+                          join p in dbHospital.Pacientes on i.ID_Paciente equals p.ID
+                          join t in dbHospital.Tratamientoes on ta.ID_Tratamiento equals t.ID select new InfoTratamientoAsignado{
+                              ID = ta.ID,
+                              Tratamiento = t.Nombre,
+                              Paciente = p.Nombre,
+                              Fecha_Inicio = ta.Fecha_inicio.ToString(),
+                              Fecha_Fin = ta.Fecha_fin.ToString()
+                          }).ToList();
+            return result;
         }
 
         // POST: Tratamiento_asignado/Create
