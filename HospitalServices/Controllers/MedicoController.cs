@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using HospitalServices.Models;
+using HospitalServices.Clases;
 
 namespace HospitalServices.Controllers
 {
@@ -16,22 +17,24 @@ namespace HospitalServices.Controllers
 
         // GET: Medico
         [HttpGet]
-        public List<Medico> GetAll()
+        public List<InfoMedico> GetAll()
         {
-            //return dbHospital.Medicos.ToList();
+            // return dbHospital.Medicos.ToList();
 
-            var result = dbHospital.Medicos.Select(x => new Medico
+            var result = dbHospital.Medicos.Select(x => new InfoMedico
             {
                 ID = x.ID,
                 Nombre = x.Nombre,
                 Apellido = x.Apellido,
-                Especialidad = x.Especialidad,
-                Dirección = x.Dirección,
-                Teléfono = x.Teléfono
+                Especialidad = x.Especializacion.Nombre,
+                Direccion = x.Dirección,
+                Telefono = x.Teléfono,
+                ID_Especializacion = x.ID_Especializacion.Value
             }).ToList();
             return result;
+            
         }
-    
+
 
         // POST: Medico/Create
         [HttpPost]
@@ -60,6 +63,7 @@ namespace HospitalServices.Controllers
             dbMedico.Dirección = medico.Dirección;
             dbMedico.Teléfono = medico.Teléfono;
             dbMedico.Especialidad = medico.Especialidad;
+            dbMedico.ID_Especializacion = medico.ID_Especializacion;
             dbHospital.SaveChanges();
             return "Se actualizo de manera correcta";
         }
