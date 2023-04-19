@@ -9,10 +9,10 @@
 
 namespace HospitalServices.Models
 {
-    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Runtime.Serialization;
+    using Newtonsoft.Json;
 
     public partial class Ingreso
     {
@@ -29,7 +29,6 @@ namespace HospitalServices.Models
         public Nullable<int> ID_Habitacion { get; set; }
         public Nullable<System.DateTime> Fecha_ingreso { get; set; }
         public Nullable<System.DateTime> Fecha_salida { get; set; }
-
         [JsonIgnore]
         [IgnoreDataMember]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

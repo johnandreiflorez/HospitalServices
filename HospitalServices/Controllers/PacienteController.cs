@@ -15,13 +15,31 @@ namespace HospitalServices.Controllers
     {
         private DBHospital dbHospital = new DBHospital();
 
-        // GET: Paciente
-        [EnableCors(origins: "http://localhost:62289", headers: "*", methods: "*")]
-        [HttpGet]
-        public List<Paciente> GetAll()
+        [HttpPatch]
+        public List<Paciente> GetPacientes()
         {
-            //return dbHospital.Pacientes.Select(x => new PacienteInfo { Nombre = x.Nombre, Apellido = x.Apellido, Teléfono = x.Teléfono, Dirección = x.Dirección }).ToList();
-            var response = dbHospital.Pacientes.ToList();
+            var response = (from p in dbHospital.Pacientes 
+                            join i in dbHospital.Ingresoes on p.ID equals i.ID_Paciente 
+                            join h in dbHospital.Habitacions on i.ID_Habitacion equals h.ID
+                            where i.Fecha_salida == null select p).ToList();
+            return response;
+        }
+
+        // GET: Paciente
+        [HttpGet]
+        public List<PacienteInfo> GetAll()
+        {
+            var response = dbHospital.Pacientes.Select(x => new PacienteInfo {
+                ID = x.ID,
+                Nombre = x.Nombre,
+                Apellido = x.Apellido,
+                Fecha_Nacimiento = x.Fecha_nacimiento.ToString(),
+                Teléfono = x.Teléfono,
+                Dirección = x.Dirección,
+                Tipo_Documento = x.Tipo_Documento.Nombre,
+                Documento = x.Cedula,
+                }).ToList();
+            //var response = dbHospital.Pacientes.ToList();
             return response;
         }
        
@@ -58,6 +76,8 @@ namespace HospitalServices.Controllers
             dbPaciente.Dirección = paciente.Dirección;
             dbPaciente.Teléfono = paciente.Teléfono;
             dbPaciente.Fecha_nacimiento = paciente.Fecha_nacimiento;
+            dbPaciente.ID_Tipo_Documento = paciente.ID_Tipo_Documento;
+            dbPaciente.Cedula = paciente.Cedula;
             dbHospital.SaveChanges();
             return "Se actualizo de manera correcta";
         }

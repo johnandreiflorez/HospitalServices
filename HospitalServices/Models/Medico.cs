@@ -21,7 +21,7 @@ namespace HospitalServices.Models
         {
             this.Atencions = new HashSet<Atencion>();
         }
-    
+
         public int ID { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
@@ -33,6 +33,9 @@ namespace HospitalServices.Models
         [IgnoreDataMember]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Atencion> Atencions { get; set; }
+        [JsonIgnore]
+        [IgnoreDataMember]
         public virtual Especializacion Especializacion { get; set; }
     }
+
 }

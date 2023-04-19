@@ -30,6 +30,7 @@ namespace HospitalServices.Models
         public string Dirección { get; set; }
         public string Teléfono { get; set; }
         public Nullable<int> ID_Tipo_Documento { get; set; }
+        public string Cedula { get; set; }
         [JsonIgnore]
         [IgnoreDataMember]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

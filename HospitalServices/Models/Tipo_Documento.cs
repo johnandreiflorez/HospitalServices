@@ -11,7 +11,9 @@ namespace HospitalServices.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Runtime.Serialization;
+    using Newtonsoft.Json;
+
     public partial class Tipo_Documento
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -22,7 +24,9 @@ namespace HospitalServices.Models
     
         public int ID { get; set; }
         public string Nombre { get; set; }
-    
+
+        [JsonIgnore]
+        [IgnoreDataMember]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Paciente> Pacientes { get; set; }
     }

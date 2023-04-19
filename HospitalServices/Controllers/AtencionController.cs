@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using HospitalServices.Models;
+using HospitalServices.Clases;
 
 namespace HospitalServices.Controllers
 {
@@ -16,9 +17,21 @@ namespace HospitalServices.Controllers
 
         // GET: Atencion
         [HttpGet]
-        public List<Atencion> GetAll()
+        public List<InfoAtencion> GetAll()
         {
-            return dbHospital.Atencions.ToList();
+            //return dbHospital.Atencions.ToList();
+
+            var result = dbHospital.Atencions.Select(x => new InfoAtencion
+            {
+                ID = x.ID,
+                Medico = x.Medico.Nombre,
+                Enfermera = x.Enfermera.Nombre,
+                Paciente = x.Paciente.Nombre,
+                Ingreso = x.Ingreso.Fecha_ingreso.ToString(),
+                Fecha = x.Fecha.ToString(),
+                Notas = x.Notas
+            }).ToList();
+            return result;
         }
 
         // POST: Atencion/Create
