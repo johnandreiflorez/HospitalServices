@@ -21,7 +21,7 @@ namespace HospitalServices.Models
         {
             this.Atencions = new HashSet<Atencion>();
         }
-    
+
         public int ID { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
@@ -37,4 +37,5 @@ namespace HospitalServices.Models
         [IgnoreDataMember]
         public virtual Especializacion Especializacion { get; set; }
     }
+
 }

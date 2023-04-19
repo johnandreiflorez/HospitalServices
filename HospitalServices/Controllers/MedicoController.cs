@@ -20,7 +20,6 @@ namespace HospitalServices.Controllers
         public List<InfoMedico> GetAll()
         {
             // return dbHospital.Medicos.ToList();
-
             var result = dbHospital.Medicos.Select(x => new InfoMedico
             {
                 ID = x.ID,
@@ -32,7 +31,6 @@ namespace HospitalServices.Controllers
                 ID_Especializacion = x.ID_Especializacion.Value
             }).ToList();
             return result;
-            
         }
 
 
