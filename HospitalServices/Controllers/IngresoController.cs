@@ -19,14 +19,17 @@ namespace HospitalServices.Controllers
         [HttpGet]
         public List<infoIngreso> GetAll()
         {
-            var result = dbHospital.Ingresoes.Select(x => new infoIngreso
-            {
-                ID = x.ID,
-                Paciente = x.Paciente.Nombre,
-                Habitacion = x.Habitacion.Tipo,
-                Fecha_Ingreso = x.Fecha_ingreso.ToString(),
-                Fecha_Salida = x.Fecha_salida.ToString()
-            }).ToList();
+            var result = (from I in dbHospital.Ingresoes
+                       join H in dbHospital.Habitacions on I.ID_Habitacion equals H.ID
+                       join TH in dbHospital.Tipo_Habitacion on H.ID_Tipo_Habitacion equals TH.ID
+                       join P in dbHospital.Pacientes on I.ID_Paciente equals P.ID
+                       select new infoIngreso {
+                           ID = I.ID,
+                           Paciente = P.Nombre,
+                           Habitacion = TH.Nombre,
+                           Fecha_Ingreso = I.Fecha_ingreso.ToString(),
+                           Fecha_Salida = I.Fecha_salida.ToString()
+                       }).ToList();
             return result;
         }
 

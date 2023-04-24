@@ -10,7 +10,7 @@ using HospitalServices.Clases;
 
 namespace HospitalServices.Controllers
 {
-    [EnableCors(origins: "http://localhost:62289", methods:"*", headers:"*")]
+    [EnableCors(origins: "http://localhost:62289", methods: "*", headers: "*")]
     public class FacturacionController : ApiController
     {
         private DBHospital dbHospital = new DBHospital();
@@ -27,7 +27,7 @@ namespace HospitalServices.Controllers
                             where i.Fecha_salida == null
                             select new InfoFacturacion
                             {
-                                Cedula = p.Nombre,
+                                Cedula = p.Cedula,
                                 Paciente = p.Nombre,
                                 Habitacion = th.Nombre + ": " + th.Descripcion + ", ubicada en el departamento: " + d.Nombre + ", piso: " + h.Tipo,
                                 FechaIngreso = i.Fecha_ingreso.ToString(),
@@ -37,24 +37,12 @@ namespace HospitalServices.Controllers
             return response;
         }
 
-        [HttpPatch]
-        public List<TratamientosFacturar> getTratamientos(int ID)
-        {
-            var response = (from ta in dbHospital.Tratamiento_asignado join t in dbHospital.Tratamientoes on ta.ID_Tratamiento equals t.ID where ta.ID_Ingreso == ID 
-                            select  new TratamientosFacturar{
-                                Medicamento = "Tales",
-                                Tratamiento = t.Nombre +": "+ t.Descripción,
-                                Fecha_Fin = ta.Fecha_fin.ToString(),
-                                Fecha_Inicio = ta.Fecha_inicio.ToString(),
-                                Valor = t.Costo.Value,
-                            }).ToList();
-            return response;
-        }
-
         // POST: Facturacion/Create
         [HttpPost]
         public Facturacion Create(Facturacion facturacion)
         {
+            Ingreso ingreso = dbHospital.Ingresoes.Where(x => x.ID == facturacion.ID_Ingreso).FirstOrDefault();
+            ingreso.Fecha_salida = facturacion.FechaFacturacion;
             Facturacion result = dbHospital.Facturacions.Add(facturacion);
             dbHospital.SaveChanges();
             return result;
@@ -86,9 +74,40 @@ namespace HospitalServices.Controllers
         public Facturacion Delete(int id)
         {
             Facturacion dbFacturacion = dbHospital.Facturacions.Where(x => x.ID == id).FirstOrDefault();
+            Ingreso dbIngreso = dbHospital.Ingresoes.Where(x => x.ID == dbFacturacion.ID_Ingreso).FirstOrDefault();
+            dbIngreso.Fecha_salida = null;
             dbHospital.Facturacions.Remove(dbFacturacion);
             dbHospital.SaveChanges();
             return dbFacturacion;
+        }
+
+        [HttpPatch]
+        public List<InfoFacturados> GetFacturados()
+        {
+            var response = (from i in dbHospital.Ingresoes
+                            join p in dbHospital.Pacientes on i.ID_Paciente equals p.ID
+                            join h in dbHospital.Habitacions on i.ID_Habitacion equals h.ID
+                            join th in dbHospital.Tipo_Habitacion on h.ID_Tipo_Habitacion equals th.ID
+                            join d in dbHospital.Departamentoes on h.ID_Departamento equals d.ID
+                            join f in dbHospital.Facturacions on i.ID equals f.ID_Ingreso
+                            where i.Fecha_salida != null
+                            select new InfoFacturados
+                            {
+                                ID = f.ID,
+                                FechaPago = f.FechaPago.ToString(),
+                                Cedula = p.Cedula,
+                                Paciente = p.Nombre,
+                                Habitacion = th.Nombre + ": " + th.Descripcion + ", ubicada en el departamento: " + d.Nombre + ", piso: " + h.Tipo,
+                                FechaIngreso = i.Fecha_ingreso.ToString(),
+                                PrecioHabitacion = h.Precio.Value,
+                                IDIngreso = i.ID,
+                                FechaSalida = i.Fecha_salida.ToString(),
+                            }).ToList();
+            foreach (var item in response)
+            {
+                item.calcularValor();
+            }
+            return response;    
         }
     }
 }

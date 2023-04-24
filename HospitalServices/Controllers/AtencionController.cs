@@ -38,6 +38,8 @@ namespace HospitalServices.Controllers
         [HttpPost]
         public Atencion Create(Atencion atencion)
         {
+            var paciente = dbHospital.Ingresoes.Where(x => x.ID == atencion.ID_Ingreso).Select(x => x.ID_Paciente).FirstOrDefault();
+            atencion.ID_Paciente = paciente;
             Atencion result = dbHospital.Atencions.Add(atencion);
             dbHospital.SaveChanges();
             return result;
@@ -55,11 +57,13 @@ namespace HospitalServices.Controllers
         [HttpPut]
         public string Edit(Atencion atencion)
         {
+            var paciente = dbHospital.Ingresoes.Where(x => x.ID == atencion.ID_Ingreso).Select(x => x.ID_Paciente).FirstOrDefault();
+            atencion.ID_Paciente = paciente;
             Atencion dbAtencion = dbHospital.Atencions.Where(x => x.ID == atencion.ID).FirstOrDefault();
             dbAtencion.ID_Enfermera = atencion.ID_Enfermera;
             dbAtencion.ID_Ingreso = atencion.ID_Ingreso;
             dbAtencion.ID_Medico = atencion.ID_Medico;
-            dbAtencion.ID_Paciente = atencion.ID_Paciente;
+            dbAtencion.ID_Paciente = paciente;
             dbAtencion.Fecha = atencion.Fecha;
             dbAtencion.Notas = atencion.Notas;
             dbHospital.SaveChanges();

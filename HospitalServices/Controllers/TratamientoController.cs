@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using HospitalServices.Models;
+using HospitalServices.Clases;
 
 namespace HospitalServices.Controllers
 {
@@ -19,6 +20,23 @@ namespace HospitalServices.Controllers
         public List<Tratamiento> GetAll()
         {
             return dbHospital.Tratamientoes.ToList();
+        }
+
+        [HttpPatch]
+        public List<TratamientosFacturar> getTratamientos(int ID)
+        {
+            var response = (from ta in dbHospital.Tratamiento_asignado
+                            join t in dbHospital.Tratamientoes on ta.ID_Tratamiento equals t.ID
+                            where ta.ID_Ingreso == ID
+                            select new TratamientosFacturar
+                            {
+                                Medicamento = "Tales",
+                                Tratamiento = t.Nombre + ": " + t.Descripción,
+                                Fecha_Fin = ta.Fecha_fin.ToString(),
+                                Fecha_Inicio = ta.Fecha_inicio.ToString(),
+                                Valor = t.Costo.Value,
+                            }).ToList();
+            return response;
         }
 
         // POST: Tratamiento/Create

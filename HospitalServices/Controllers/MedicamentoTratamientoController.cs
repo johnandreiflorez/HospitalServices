@@ -40,5 +40,24 @@ namespace HospitalServices.Controllers
                 return false;
             }
         }
+
+        [HttpDelete]
+        public bool Delete(List<Medicamento_Tratamiento> medicamento_Tratamiento)
+        {
+            try
+            {
+                foreach (var item in medicamento_Tratamiento)
+                {
+                    var medicamento = dbHospital.Medicamento_Tratamiento.Where(x => x.ID_Medicamento == item.ID_Medicamento && x.ID_Tratamiento == item.ID_Tratamiento).FirstOrDefault();
+                    dbHospital.Medicamento_Tratamiento.Remove(medicamento);
+                }
+                dbHospital.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
     }
 }
