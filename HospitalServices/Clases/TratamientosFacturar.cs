@@ -7,7 +7,7 @@ namespace HospitalServices.Clases
 {
     public class TratamientosFacturar
     {
-        public string Medicamento { get; set; }
+        //public string Medicamento { get; set; }
         public string Tratamiento { get; set; }
         public Decimal Valor { get; set; }
         public string Fecha_Inicio { get; set; }
